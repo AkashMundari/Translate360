@@ -38,30 +38,28 @@ export default function App() {
     let tlang = toLang.current.value.toString();
 
     //API start
-    const data = "from=" + flang + "&to=" + tlang + "&text=" + val;
+    const data = JSON.stringify({
+      text: val,
+      source: flang,
+      target: tlang,
+    });
 
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
 
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === this.DONE) {
-        setTranslation(JSON.parse(this.responseText).trans);
+        setTranslation(JSON.parse(this.responseText).translations.translation);
       }
     });
 
-    xhr.open(
-      "POST",
-      "https://google-translate113.p.rapidapi.com/api/v1/translator/text"
-    );
-    xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+    xhr.open("POST", "https://translate-plus.p.rapidapi.com/translate");
+    xhr.setRequestHeader("content-type", "application/json");
     xhr.setRequestHeader(
       "X-RapidAPI-Key",
       "21317709f8mshf76800d620e30fdp179c4ejsnab0fef901ab0"
     );
-    xhr.setRequestHeader(
-      "X-RapidAPI-Host",
-      "google-translate113.p.rapidapi.com"
-    );
+    xhr.setRequestHeader("X-RapidAPI-Host", "translate-plus.p.rapidapi.com");
 
     xhr.send(data);
   };
